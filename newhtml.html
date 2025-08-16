@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Practice Login</title>
+  <style>
+    :root {
+      --bg: #0f172a;      /* slate-900 */
+      --card: #111827;    /* gray-900 */
+      --text: #e5e7eb;    /* gray-200 */
+      --muted: #94a3b8;   /* slate-400 */
+      --brand: #6366f1;   /* indigo-500 */
+      --brand-2: #22c55e; /* emerald-500 */
+      --error: #ef4444;   /* red-500 */
+      --ring: rgba(99, 102, 241, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: linear-gradient(135deg, var(--bg), #0b1023 60%);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 420px;
+      padding: 24px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+    }
+    .logo {
+      font-weight: 800;
+      letter-spacing: .5px;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+    .dot {
+      width: 10px; height: 10px; border-radius: 999px; background: var(--brand);
+      box-shadow: 0 0 20px var(--brand);
+    }
+    h1 {
+      font-size: 22px;
+      margin: 8px 0 6px;
+    }
+    p.sub {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin: 12px 0 6px;
+      color: var(--muted);
+    }
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(2,6,23,0.35);
+      color: var(--text);
+      outline: none;
+      transition: box-shadow .15s ease, border-color .15s ease;
+    }
+    input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 6px var(--ring);
+    }
+    .actions {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 14px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,.25);
+      background: linear-gradient(180deg, var(--brand), #4f46e5);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .06s ease, filter .15s ease;
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn:active { transform: translateY(1px); }
+    .link {
+      color: var(--brand-2);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .error {
+      margin-top: 10px;
+      color: var(--error);
+      font-size: 13px;
+      min-height: 18px;
+    }
+    .toggle {
+      margin-top: 18px;
+      display: flex; align-items: center; gap: 10px; justify-content: center;
+      font-size: 13px; color: var(--muted);
+    }
+    .ghost {
+      background: transparent; color: var(--text);
+      border: 1px dashed rgba(148,163,184,.35);
+    }
+    footer {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    /* tiny success toast */
+    .toast {
+      position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #bbf7d0;
+      padding: 10px 14px; border-radius: 999px;
+      opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="logo"><span class="dot"></span> Practice Login</div>
+      <h1>Welcome back</h1>
+      <p class="sub">Use this file to practice Git add → commit → push.</p>
+
+      <form id="loginForm" novalidate>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="••••••••" minlength="6" required />
+
+        <div class="actions">
+          <button class="btn" type="submit">Sign in</button>
+          <a class="link" href="#" id="registerLink">Create account</a>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="toggle">
+          <span>Try making any change here and push to GitHub →</span>
+          <button type="button" class="btn ghost" id="darkToggle">Toggle Theme</button>
+        </div>
+      </form>
+
+      <footer>Tip: change text/colors, commit, and push to see updates on GitHub.</footer>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Form submitted (demo)!</div>
+
+  <script>
+    // Simple demo validation + theme toggle for visible changes in commits
+    const form = document.getElementById('loginForm');
+    const error = document.getElementById('error');
+    const toast = document.getElementById('toast');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value;
+
+      error.textContent = '';
+
+      if (!email) {
+        error.textContent = 'Email is required.';
+        return;
+      }
+      if (!/^\S+@\S+\.\S+$/.test(email)) {
+        error.textContent = 'Please enter a valid email.';
+        return;
+      }
+      if (pass.length < 6) {
+        error.textContent = 'Password must be at least 6 characters.';
+        return;
+      }
+
+      // Fake "success"
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1500);
+    });
+
+    // Theme toggle (just swaps brand colors so diffs are obvious in Git)
+    const root = document.documentElement;
+    document.getElementById('darkToggle').addEventListener('click', () => {
+      const current = getComputedStyle(root).getPropertyValue('--brand').trim();
+      if (current === '#6366f1') {
+        root.style.setProperty('--brand', '#f59e0b'); // amber-500
+      } else {
+        root.style.setProperty('--brand', '#6366f1'); // indigo-500
+      }
+    });
+
+    // Fake "register" link to generate a tiny diff if you want
+    document.getElementById('registerLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Pretend this goes to a register page.');
+    });
+  </script>
+</body>
+</html>
